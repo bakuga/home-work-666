@@ -1,0 +1,34 @@
+
+.clock {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Выравнивание по левому краю */
+    gap: 12px; /* Отступ между основным блоком времени/даты и кнопками */
+}
+
+.watch {
+    font-size: 28px; /* Немного больше для основного времени */
+    color: #000;
+    cursor: pointer;
+}
+
+.watch strong {
+    font-weight: bold; /* Время жирным */
+}
+
+.more {
+    font-size: 18px; /* Размер шрифта для даты */
+    color: #333; /* Цвет для дополнительной даты */
+    min-height: 22px; /* Чтобы не было "прыжка" контента при наведении */
+    padding-left: 2px; /* Небольшой отступ, чтобы текст не прилипал */
+}
+
+.buttonsContainer {
+    display: flex;
+    gap: 10px; /* Отступ между кнопками */
+    padding-top: 8px; /* Небольшой отступ сверху от блока с датой */
+}
