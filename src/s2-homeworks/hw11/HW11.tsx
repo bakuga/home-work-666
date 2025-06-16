@@ -1,46 +1,30 @@
-import React, { useState, useEffect } from 'react'; // Добавили useEffect
+import React, { useState } from 'react';
 import s from './HW11.module.css';
 import s2 from '../../s1-main/App.module.css';
 import { restoreState } from '../hw06/localStorage/localStorage';
 import SuperRange from './common/c7-SuperRange/SuperRange';
 
 function HW11() {
+    // Эта инициализация УЖЕ использует 0 и 100 как значения по умолчанию,
+    // если в localStorage ничего не найдено.
     const [value1, setValue1] = useState(restoreState<number>('hw11-value1', 0));
     const [value2, setValue2] = useState(restoreState<number>('hw11-value2', 100));
     const MAX_VALUE = 100;
 
-    // Этот state нужен только для "встряски" пропса value двойного слайдера
-    const [doubleSliderValue, setDoubleSliderValue] = useState<[number, number]>([value1, value2]);
-
-    useEffect(() => {
-        // Синхронизируем doubleSliderValue, когда value1 или value2 изменяются извне
-        setDoubleSliderValue([value1, value2]);
-    }, [value1, value2]);
-
     const handleChange = (event: Event, newValue: number | number[]) => {
-        let newV1: number, newV2: number;
-
         if (Array.isArray(newValue)) {
-            // Изменился двойной слайдер
-            newV1 = newValue[0];
-            newV2 = newValue[1];
-
-            setValue1(newV1);
-            setValue2(newV2);
-            // setDoubleSliderValue([newV1, newV2]); // Обновится через useEffect
-
+            // Двойной слайдер
+            const [newVal1, newVal2] = newValue;
+            setValue1(newVal1);
+            setValue2(newVal2);
         } else {
-            // Изменился одиночный слайдер
-            newV1 = newValue as number;
-            newV2 = value2; // Берем текущее значение value2
-
-            setValue1(newV1); // Устанавливаем новое значение для value1
-
-            if (newV1 > value2) { // Если value1 пытается обогнать value2
-                newV2 = newV1;    // value2 будет "подтянуто"
-                setValue2(newV2);
+            // Одиночный слайдер
+            const newSingleValue = newValue as number;
+            setValue1(newSingleValue);
+            // Гарантируем, что value1 <= value2
+            if (newSingleValue > value2) {
+                setValue2(newSingleValue);
             }
-            // setDoubleSliderValue([newV1, newV2]); // Обновится через useEffect
         }
     };
 
@@ -62,8 +46,7 @@ function HW11() {
                         <span id={'hw11-value-1'} className={s.number}>{value1}</span>
                         <SuperRange
                             id={'hw11-double-slider'}
-                            // Используем отдельный state для value, чтобы им можно было "встряхнуть"
-                            value={doubleSliderValue}
+                            value={[value1, value2]}
                             onChange={handleChange}
                             min={0}
                             max={MAX_VALUE}
