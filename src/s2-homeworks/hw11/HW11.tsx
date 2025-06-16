@@ -62,12 +62,13 @@ function HW11() {
             // Если одиночный слайдер пытается установить значение БОЛЬШЕ текущего value2,
             // то оба значения (value1 и value2) должны стать этим новым значением.
             // Это соответствует "схлопыванию" диапазона или "проталкиванию" правого края.
-            if (newSingleValue > value2) {
+            if (newSingleValue >= 100) {
+                setValue1(99); // или 98, безопаснее
+                setValue2(100);
+            } else if (newSingleValue > value2) {
                 setValue1(newSingleValue);
-                setValue2(newSingleValue); // value2 подтягивается к value1
+                setValue2(newSingleValue);
             } else {
-                // В противном случае (newSingleValue <= value2),
-                // меняется только value1. value2 остается на месте.
                 setValue1(newSingleValue);
             }
         }
