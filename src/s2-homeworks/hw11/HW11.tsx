@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import s from './HW11.module.css'
 import s2 from '../../s1-main/App.module.css'
@@ -6,16 +5,20 @@ import { restoreState } from '../hw06/localStorage/localStorage'
 import SuperRange from './common/c7-SuperRange/SuperRange'
 
 function HW11() {
-    const [value1, setValue1] = useState(() => restoreState<number>('hw11-value1', 0))
+    const [value1, setValue1] = useState(() =>
+        restoreState<number>('hw11-value1', 0)
+    )
+
     const [value2, setValue2] = useState(() => {
         const restored = restoreState<number>('hw11-value2', 100)
-        return restored >= 100 ? 99 : restored // ограничение, чтобы второй слайдер не был на краю
+        return restored >= 99 ? 98 : restored
     })
 
+    // Автофикс для value2 на старте, если был сохранен > 98
     useEffect(() => {
-        if (value2 >= 100) {
-            setValue2(99)
-            localStorage.setItem('hw11-value2', JSON.stringify(99))
+        if (value2 >= 99) {
+            setValue2(98)
+            localStorage.setItem('hw11-value2', JSON.stringify(98))
         }
     }, [])
 
@@ -23,19 +26,17 @@ function HW11() {
         if (Array.isArray(newValue)) {
             let [newVal1, newVal2] = newValue
 
-            // Защита от равных значений и выхода за 100
+            // Не допускаем одинаковых значений
             if (newVal1 === newVal2) newVal1 = newVal2 - 1
-            if (newVal2 > 99) newVal2 = 99
 
             setValue1(newVal1)
             setValue2(newVal2)
         } else {
             const newSingleValue = newValue as number
+            setValue1(newSingleValue)
 
             if (newSingleValue >= value2) {
-                setValue1(value2 - 1)
-            } else {
-                setValue1(newSingleValue)
+                setValue2(newSingleValue + 1)
             }
         }
     }
@@ -51,7 +52,7 @@ function HW11() {
                         <SuperRange
                             id={'hw11-single-slider'}
                             value={value1}
-                            onChange={(e, val) => change(e, val as number)}
+                            onChange={(e, val) => change(e, val)}
                             min={0}
                             max={100}
                         />
