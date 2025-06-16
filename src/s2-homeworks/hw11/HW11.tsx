@@ -51,29 +51,24 @@ function HW11() {
 
     const change = (event: Event, newValue: number | number[]) => {
         if (Array.isArray(newValue)) {
-            // Двойной слайдер изменился
-            // MUI с disableSwap гарантирует, что newValue[0] <= newValue[1]
-            setValue1(newValue[0]);
-            setValue2(newValue[1]);
+            const [newVal1, newVal2] = newValue;
+
+            // НЕ допускаем совпадения значений
+            const adjustedVal1 = newVal1 === newVal2 ? newVal1 - 1 : newVal1;
+
+            setValue1(adjustedVal1);
+            setValue2(newVal2);
         } else {
-            // Одиночный слайдер изменился
             const newSingleValue = newValue as number;
 
-            // Если одиночный слайдер пытается установить значение БОЛЬШЕ текущего value2,
-            // то оба значения (value1 и value2) должны стать этим новым значением.
-            // Это соответствует "схлопыванию" диапазона или "проталкиванию" правого края.
-            if (newSingleValue >= 100) {
-                setValue1(99); // или 98, безопаснее
-                setValue2(100);
-            } else if (newSingleValue > value2) {
-                setValue1(newSingleValue);
-                setValue2(newSingleValue);
+            if (newSingleValue >= value2) {
+                setValue1(value2 - 1);
             } else {
                 setValue1(newSingleValue);
             }
         }
     };
-    console.log(value1, value2)
+
     return (
 
         <div id={'hw11'}>
