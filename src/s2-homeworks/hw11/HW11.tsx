@@ -1,74 +1,59 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import s from './HW11.module.css'
-import s2 from '../../s1-main/App.module.css'
-import { restoreState } from '../hw06/localStorage/localStorage'
-import SuperRange from './common/c7-SuperRange/SuperRange'
+import {restoreState, saveState} from '../hw06/localStorage/localStorage'
+import SuperRange from "./common/c7-SuperRange/SuperRange";
 
 function HW11() {
-    const [value1, setValue1] = useState(() =>
-        restoreState<number>('hw11-value1', 0)
-    )
+    const [value1, setValue1] = useState(() => restoreState<number>('hw11-value1', 0))
+    const [value2, setValue2] = useState(() => Math.min(restoreState<number>('hw11-value2', 100), 98))
 
-    const [value2, setValue2] = useState(() => {
-        const restored = restoreState<number>('hw11-value2', 100)
-        return restored >= 99 ? 98 : restored
-    })
-
-    // Автофикс для value2 на старте, если был сохранен > 98
+    // Фикс на случай, если в localStorage сохранено 99 или 100
     useEffect(() => {
-        if (value2 >= 99) {
+        if (value2 > 98) {
             setValue2(98)
-            localStorage.setItem('hw11-value2', JSON.stringify(98))
+            saveState<number>('hw11-value2', 98)
         }
     }, [])
 
-    const change = (event: Event, newValue: number | number[]) => {
-        if (Array.isArray(newValue)) {
-            let [newVal1, newVal2] = newValue
-
-            // Не допускаем одинаковых значений
-            if (newVal1 === newVal2) newVal1 = newVal2 - 1
-
+    const change = (event: Event, value: number | number[]) => {
+        if (typeof value === 'number') {
+            setValue1(value)
+            saveState<number>('hw11-value1', value)
+        } else if (Array.isArray(value)) {
+            const [newVal1, newVal2] = value
             setValue1(newVal1)
             setValue2(newVal2)
-        } else {
-            const newSingleValue = newValue as number
-            setValue1(newSingleValue)
-
-            if (newSingleValue >= value2) {
-                setValue2(newSingleValue + 1)
-            }
+            saveState<number>('hw11-value1', newVal1)
+            saveState<number>('hw11-value2', newVal2)
         }
     }
 
     return (
         <div id={'hw11'}>
-            <div className={s2.hwTitle}>Homework #11</div>
+            <div className={s.hwTitle}>Homework 11</div>
+            <div className={s.hw}>
+                <div className={s.sliderBlock}>
+                    <span id={'hw11-value'} className={s.number}>{value1}</span>
+                    <SuperRange
+                        id={'hw11-single-slider'}
+                        value={value1}
+                        onChange={change}
+                        min={0}
+                        max={99}
+                    />
+                </div>
 
-            <div className={s2.hw}>
-                <div className={s.container}>
-                    <div className={s.wrapper}>
-                        <span id={'hw11-value'} className={s.number}>{value1}</span>
-                        <SuperRange
-                            id={'hw11-single-slider'}
-                            value={value1}
-                            onChange={(e, val) => change(e, val)}
-                            min={0}
-                            max={100}
-                        />
-                    </div>
-                    <div className={s.wrapper}>
-                        <span id={'hw11-value-1'} className={s.number}>{value1}</span>
-                        <SuperRange
-                            id={'hw11-double-slider'}
-                            value={[value1, value2]}
-                            onChange={change}
-                            min={0}
-                            max={100}
-                            disableSwap
-                        />
-                        <span id={'hw11-value-2'} className={s.number}>{value2}</span>
-                    </div>
+                <div className={s.sliderBlock}>
+                    <span className={s.number}>{value1}</span>
+                    <SuperRange
+                        id={'hw11-double-slider'}
+                        value={[value1, value2]}
+                        onChange={change}
+                        min={0}
+                        max={99}
+                        disableSwap
+                    />
+                    <span className={s.number}>{value2}</span>
                 </div>
             </div>
         </div>
