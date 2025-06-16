@@ -10,7 +10,7 @@ import SuperRange from './common/c7-SuperRange/SuperRange'
 * 3 - сделать стили в соответствии с дизайном
 * */
 
-function HW11() {
+/*function HW11() {
     const [value1, setValue1] = useState(restoreState<number>('hw11-value1', 0))
     const [value2, setValue2] = useState(restoreState<number>('hw11-value2', 100))
 
@@ -43,9 +43,38 @@ function HW11() {
                 setValue2(newSingleValue);
             }
         }
-    }
+    }*/
 
+function HW11() {
+    const [value1, setValue1] = useState(restoreState<number>('hw11-value1', 0));
+    const [value2, setValue2] = useState(restoreState<number>('hw11-value2', 100));
+
+    const change = (event: Event, newValue: number | number[]) => {
+        if (Array.isArray(newValue)) {
+            // Двойной слайдер изменился
+            // MUI с disableSwap гарантирует, что newValue[0] <= newValue[1]
+            setValue1(newValue[0]);
+            setValue2(newValue[1]);
+        } else {
+            // Одиночный слайдер изменился
+            const newSingleValue = newValue as number;
+
+            // Если одиночный слайдер пытается установить значение БОЛЬШЕ текущего value2,
+            // то оба значения (value1 и value2) должны стать этим новым значением.
+            // Это соответствует "схлопыванию" диапазона или "проталкиванию" правого края.
+            if (newSingleValue > value2) {
+                setValue1(newSingleValue);
+                setValue2(newSingleValue); // value2 подтягивается к value1
+            } else {
+                // В противном случае (newSingleValue <= value2),
+                // меняется только value1. value2 остается на месте.
+                setValue1(newSingleValue);
+            }
+        }
+    };
+    console.log(value1, value2)
     return (
+
         <div id={'hw11'}>
             <div className={s2.hwTitle}>Homework #11</div>
 
