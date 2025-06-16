@@ -1,40 +1,30 @@
-
 import React, { useState } from 'react';
 import s from './HW11.module.css';
 import s2 from '../../s1-main/App.module.css';
 import { restoreState } from '../hw06/localStorage/localStorage';
 import SuperRange from './common/c7-SuperRange/SuperRange';
 
+/*
+* 1 - передать значения в оба слайдера +
+* 2 - дописать типы и логику функции change +
+* 3 - сделать стили в соответствии с дизайном (предполагаем, что SuperRange уже стилизован)
+* */
+
 function HW11() {
+    // for autotests // не менять // можно подсунуть в локалСторэдж нужные числа, чтоб увидеть как они отображаются
     const [value1, setValue1] = useState(restoreState<number>('hw11-value1', 0));
     const [value2, setValue2] = useState(restoreState<number>('hw11-value2', 100));
 
-    const change = (event: Event, newValue: number | number[]) => {
+    const change = (event: Event, newValue: number | number[]) => { // Уточнили типы
+        // пишет студент // если пришёл массив - сохранить значения в оба useState, иначе в первый
         if (Array.isArray(newValue)) {
-            // Изменился двойной слайдер
-            const [newVal1, newVal2] = newValue;
-            // MUI с disableSwap гарантирует, что newVal1 <= newVal2
-            setValue1(newVal1);
-            setValue2(newVal2);
+            // Пришел массив от двойного слайдера
+            setValue1(newValue[0]);
+            setValue2(newValue[1]);
         } else {
-            // Изменился одиночный слайдер (newValue - это новое значение для value1)
-            const newSingleSliderValue = newValue as number;
-
-            // Если новое значение одиночного слайдера (будущий value1)
-            // больше ИЛИ РАВНО текущему value2 (особенно если value2 на максимуме),
-            // или просто если новый value1 "догоняет" value2.
-            // Мы хотим убедиться, что value2 "знает" об этом изменении.
-            if (newSingleSliderValue >= value2) {
-                // Если value1 догоняет или перегоняет value2,
-                // устанавливаем оба значения. Это может помочь MUI "разблокировать"
-                // ползунки, если они были на одной позиции.
-                setValue1(newSingleSliderValue); // value1 становится новым значением
-                setValue2(newSingleSliderValue); // value2 "подтягивается" к value1
-            } else {
-                // В противном случае (newSingleSliderValue < value2),
-                // меняется только value1. value2 остается на месте.
-                setValue1(newSingleSliderValue);
-            }
+            // Пришло одно значение от одиночного слайдера
+            setValue1(newValue as number);
+            // value2 НЕ трогаем здесь, согласно простому заданию
         }
     };
 
@@ -48,22 +38,24 @@ function HW11() {
                         <span id={'hw11-value'} className={s.number}>{value1}</span>
                         <SuperRange
                             id={'hw11-single-slider'}
+                            // сделать так чтоб value1 изменялось // пишет студент
                             value={value1}
-                            onChange={(e, val) => change(e, val as number)}
-                            min={0}
-                            max={100}
+                            onChange={change} // Используем общую функцию change
+                            // MUI Slider передаст event и новое значение (number)
                         />
                     </div>
-
                     <div className={s.wrapper}>
                         <span id={'hw11-value-1'} className={s.number}>{value1}</span>
                         <SuperRange
                             id={'hw11-double-slider'}
+                            // сделать так чтоб value1/2 изменялось // пишет студент
                             value={[value1, value2]}
-                            onChange={change}
-                            min={0}
-                            max={100}
-                            disableSwap
+                            onChange={change} // Используем общую функцию change
+                            // MUI Slider передаст event и новое значение (number[])
+                            // min, max и disableSwap для MUI Slider важны для корректной работы
+                            min={0}      // Предполагаем стандартный диапазон
+                            max={100}    // Предполагаем стандартный диапазон
+                            disableSwap  // Важно для двойного слайдера MUI
                         />
                         <span id={'hw11-value-2'} className={s.number}>{value2}</span>
                     </div>
