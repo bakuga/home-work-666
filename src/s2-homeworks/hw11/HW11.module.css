@@ -1,24 +1,17 @@
 .container {
     display: flex;
-    flex-direction: column;
-    gap: 30px; /* Отступ между двумя обертками слайдеров */
-    padding: 20px;
-    align-items: flex-start; /* Выравнивание по левому краю */
+    flex-direction: column; /* Располагаем слайдеры друг под другом */
+    gap: 40px; /* Расстояние между слайдерами */
 }
 
 .wrapper {
     display: flex;
-    align-items: center; /* Выравнивание элементов по центру вертикально */
-    gap: 15px; /* Отступ между числом и слайдером */
-    width: auto; /* Позволяем обертке подстраиваться под контент */
+    align-items: center; /* Выравниваем элементы по центру по вертикали */
+    gap: 15px; /* Расстояние между числом и слайдером */
 }
 
 .number {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-    font-size: 16px;
-    min-width: 30px; /* Минимальная ширина для чисел, чтобы не прыгали */
+    width: 30px; /* Фиксированная ширина для чисел, чтобы макет не "прыгал" */
     text-align: center;
-    color: #333;
+    font-weight: 600;
 }
