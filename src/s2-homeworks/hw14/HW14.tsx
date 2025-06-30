@@ -37,8 +37,15 @@ const HW14 = () => {
                 // делает студент
 
                 // сохранить пришедшие данные
-
-                //
+                if (res?.data?.techs) {
+                    setTechs(res.data.techs)
+                }
+            })
+            .catch((e) => {
+            console.error("Ошибка при отправке запроса:", e)
+        })
+            .finally(() => {
+                setLoading(false)
             })
     }
 
@@ -50,6 +57,7 @@ const HW14 = () => {
         // setSearchParams(
 
         //
+        setSearchParams(value ? { find: value } : {})
     }
 
     useEffect(() => {
