@@ -1,27 +1,81 @@
-.tech {
-    width: 50vw;
-}
+/* HW15.module.css */
 
-.developer {
-
-}
-
-.techHeader {
-    width: 50vw;
-}
-
-.developerHeader {
-
-}
-
-.row {
+.hw {
+    padding: 20px;
     display: flex;
-}
-
-.rowHeader {
-    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative; /* ✨ Добавляем это для правильного позиционирования дочерних absolute элементов */
+    min-height: 200px; /* Опционально: чтобы контейнер не схлопывался, если нет содержимого */
 }
 
 .loading {
+    font-weight: 600;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    padding: 20px 0;
 
+    /* ✨ Новые стили для позиционирования поверх */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex; /* Для центрирования крутилки */
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+    z-index: 100; /* Убедимся, что он поверх всего */
+    /* Предполагается, что анимация крутилки (Spinner) будет внутри этого div,
+       или сама иконка будет достаточно большой, чтобы ее было видно */
+}
+
+.rowHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Две колонки примерно одинаковой ширины */
+    background-color: #f2f2f2;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    gap: 10px; /* Отступ между колонками в заголовке */
+}
+
+.techHeader,
+.developerHeader {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Отступ между текстом заголовка и иконкой сортировки */
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Две колонки, как в заголовке */
+    padding: 8px 15px;
+    border-bottom: 1px solid #eee;
+    gap: 10px; /* Отступ между колонками в строке */
+}
+
+.row:last-child {
+    border-bottom: none; /* Убираем нижнюю границу у последней строки */
+}
+
+.tech,
+.developer {
+    font-size: 14px;
+    color: #555;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px; /* Отступ между Pagination и SuperSelect */
+}
+
+.text1,
+.text2 {
+    font-size: 14px;
+    color: #666;
 }

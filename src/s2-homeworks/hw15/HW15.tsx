@@ -51,11 +51,16 @@ const HW15 = () => {
         setLoading(true)
         getTechs(params)
             .then((res) => {
-                // делает студент
-
-                // сохранить пришедшие данные
-
-                //
+            if (res?.data) {
+                setTechs(res.data.techs)
+                setTotalCount(res.data.totalCount)
+            }
+        })
+            .catch((e) => {
+                console.error("Error fetching techs:", e);
+            })
+            .finally(() => {
+                setLoading(false)
             })
     }
 
@@ -68,7 +73,17 @@ const HW15 = () => {
         // sendQuery(
         // setSearchParams(
 
-        //
+        setPage(newPage)
+        setCount(newCount)
+
+
+        sendQuery({page: newPage, count: newCount, sort})
+
+        setSearchParams({
+            page: String(newPage),
+            count: String(newCount),
+            ...(sort ? {sort} : {})
+        })
     }
 
     const onChangeSort = (newSort: string) => {
@@ -80,7 +95,16 @@ const HW15 = () => {
         // sendQuery(
         // setSearchParams(
 
-        //
+        setSort(newSort)
+        setPage(1)
+
+        sendQuery({page: 1, count, sort: newSort})
+
+        setSearchParams({
+            page: '1',
+            count: String(count),
+            ...(newSort ? {sort: newSort} : {})
+        })
     }
 
     useEffect(() => {
