@@ -45,25 +45,27 @@ const HW13 = () => {
             })
             .catch((e) => {
                 // дописать
-                if (e.response) {
-                    setCode(`Код ${e.response.status}!`)
-                    setText(e.response.data.errorText)
-                    setInfo(e.response.data.info || e.response.data.message)
+                const responseData = e.response?.data;
+
+                if (e.response && responseData) {
+                    setCode(`Код ${e.response.status}!`);
+                    setText(responseData.errorText);
+                    setInfo(responseData.info || responseData.message);
                     switch (e.response.status) {
                         case 400:
-                            setImage(error400)
-                            break
+                            setImage(error400);
+                            break;
                         case 500:
-                            setImage(error500)
-                            break
+                            setImage(error500);
+                            break;
                         default:
-                            setImage(errorUnknown)
+                            setImage(errorUnknown);
                     }
                 } else {
-                    setCode(`Error!`)
-                    setText(e.message)
-                    setInfo('Error')
-                    setImage(errorUnknown)
+                    setCode(`Error!`);
+                    setText(e.message);
+                    setInfo('Error');
+                    setImage(errorUnknown);
                 }
             })
             .finally(() => {
