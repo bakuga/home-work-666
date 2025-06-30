@@ -62,7 +62,7 @@ const HW13 = () => {
                 } else {
                     setCode(`Error!`)
                     setText(e.message)
-                    setInfo(e.name)
+                    setInfo('Error')
                     setImage(errorUnknown)
                 }
             })
